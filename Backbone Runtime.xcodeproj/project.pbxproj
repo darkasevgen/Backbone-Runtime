@@ -16,6 +16,10 @@
 		74DA4BE827C13FB5005290A6 /* Backbone_RuntimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA4BE727C13FB5005290A6 /* Backbone_RuntimeTests.swift */; };
 		74DA4BF227C13FB5005290A6 /* Backbone_RuntimeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA4BF127C13FB5005290A6 /* Backbone_RuntimeUITests.swift */; };
 		74DA4BF427C13FB5005290A6 /* Backbone_RuntimeUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA4BF327C13FB5005290A6 /* Backbone_RuntimeUITestsLaunchTests.swift */; };
+		74DA4C0327C13FC6005290A6 /* imagenet_classes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 74DA4C0027C13FC6005290A6 /* imagenet_classes.txt */; };
+		74DA4C0427C13FC7005290A6 /* dog_224_cub.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 74DA4C0127C13FC6005290A6 /* dog_224_cub.jpg */; };
+		74DA4C0527C13FC7005290A6 /* Create models.ipynb in Resources */ = {isa = PBXBuildFile; fileRef = 74DA4C0227C13FC6005290A6 /* Create models.ipynb */; };
+		74DA4C0727C13FD0005290A6 /* models in Resources */ = {isa = PBXBuildFile; fileRef = 74DA4C0627C13FD0005290A6 /* models */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,10 @@
 		74DA4BED27C13FB5005290A6 /* Backbone RuntimeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Backbone RuntimeUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		74DA4BF127C13FB5005290A6 /* Backbone_RuntimeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backbone_RuntimeUITests.swift; sourceTree = "<group>"; };
 		74DA4BF327C13FB5005290A6 /* Backbone_RuntimeUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backbone_RuntimeUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		74DA4C0027C13FC6005290A6 /* imagenet_classes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = imagenet_classes.txt; path = "../Backbone's Runtime/imagenet_classes.txt"; sourceTree = "<group>"; };
+		74DA4C0127C13FC6005290A6 /* dog_224_cub.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = dog_224_cub.jpg; path = "../Backbone's Runtime/dog_224_cub.jpg"; sourceTree = "<group>"; };
+		74DA4C0227C13FC6005290A6 /* Create models.ipynb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Create models.ipynb"; path = "../Backbone's Runtime/Create models.ipynb"; sourceTree = "<group>"; };
+		74DA4C0627C13FD0005290A6 /* models */ = {isa = PBXFileReference; lastKnownFileType = folder; name = models; path = "../Backbone's Runtime/models"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +87,10 @@
 		74DA4BC427C13FB3005290A6 = {
 			isa = PBXGroup;
 			children = (
+				74DA4C0627C13FD0005290A6 /* models */,
+				74DA4C0227C13FC6005290A6 /* Create models.ipynb */,
+				74DA4C0127C13FC6005290A6 /* dog_224_cub.jpg */,
+				74DA4C0027C13FC6005290A6 /* imagenet_classes.txt */,
 				74DA4BCF27C13FB3005290A6 /* Backbone Runtime */,
 				74DA4BE627C13FB5005290A6 /* Backbone RuntimeTests */,
 				74DA4BF027C13FB5005290A6 /* Backbone RuntimeUITests */,
@@ -232,6 +244,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				74DA4BDD27C13FB5005290A6 /* LaunchScreen.storyboard in Resources */,
+				74DA4C0727C13FD0005290A6 /* models in Resources */,
+				74DA4C0527C13FC7005290A6 /* Create models.ipynb in Resources */,
+				74DA4C0427C13FC7005290A6 /* dog_224_cub.jpg in Resources */,
+				74DA4C0327C13FC6005290A6 /* imagenet_classes.txt in Resources */,
 				74DA4BDA27C13FB5005290A6 /* Assets.xcassets in Resources */,
 				74DA4BD827C13FB3005290A6 /* Main.storyboard in Resources */,
 			);
