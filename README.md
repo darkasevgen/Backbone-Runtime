@@ -1,27 +1,19 @@
 # Backbone-Runtime
 This repository provides code for initializing, testing, and measuring the running time of neural networks on Apple devices.
 
-<br/>
-
 ## Device
 Measurements were taken using the **Iphone 8 emulator on a MacBook Air (2020) M1 8GB**.
 **OS: Monterey 12.1**.
-
-<br/>
 
 ## Inference
 During testing were open: Safari, Xcode (=> Emulator) and Terminal.
 
 Time was measured for each model individually (i.e. there was only one model in the "models" folder).
 
-<br/>
-
 ## Сonfiguration
 The models were initialized using [timm](https://github.com/rwightman/pytorch-image-models). MobileViT have been initialized in the [cvnets repo](https://github.com/apple/ml-cvnets/blob/main/main_conversion.py#L26).
 
 The models have normalization and taking the top 5 probabilities. The models were converted using [coremltools](https://github.com/apple/coremltools). More: [ipynb](Create%20models.ipynb).
-
-<br/>
 
 ## Benchmark
 | Architecture family |  Model name          | MLmodel weight, MB | Running time (100 starts) on emulator Iphone 8, sec |        |        | Average frames / sec | Metrics        |                | Interpolation |
