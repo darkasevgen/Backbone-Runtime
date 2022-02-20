@@ -16,35 +16,359 @@ The models were initialized using [timm](https://github.com/rwightman/pytorch-im
 The models have normalization and taking the top 5 probabilities. The models were converted using [coremltools](https://github.com/apple/coremltools). More: [ipynb](Create%20models.ipynb).
 
 ## Benchmark
-| Architecture family |  Model name          | MLmodel weight, MB | Running time (100 starts) on emulator Iphone 8, sec |        |        | Average frames / sec | Metrics        |                | Interpolation |
-| ------------------- | -------------------- | ------------------ | --------------------------------------------------- | ------ | ------ | -------------------- | -------------- | -------------- | ------------- |
-|                     |                      |                    | Min                                                 | Max    | Avg    |                      | ImageNet top-1 | ImageNet top-5 |               |
-| MobileNet           | mn2_100              | 14,7               | 0,0090                                              | 0,0114 | 0,0100 | 99,86482083          | 72,952         | 91,002         | bicubic       |
-|                     | mn2_110d             | 18                 | 0,0128                                              | 0,0152 | 0,0137 | 72,92339643          | 75,052         | 92,188         | bicubic       |
-|                     | mn3_rw               | 21,9               | 0,0078                                              | 0,0098 | 0,0087 | 115,1641272          | 75,63          | 92,708         | bicubic       |
-|                     | mn3_large_100_miil   | 21,9               | 0,0074                                              | 0,0090 | 0,0084 | 118,5257193          | 77,918         | 92,906         | bicubic       |
-| Gernet              | gernet_s             | 32,6               | 0,0111                                              | 0,0188 | 0,0125 | 79,71578839          | 76,912         | 93,134         | bilinear      |
-|                     | gernet_m             | 84,4               | 0,0293                                              | 0,0397 | 0,0309 | 32,32946595          | 80,746         | 95,184         | bilinear      |
-| Pit                 | pit_xs_224           | 49,5               | 0,0469                                              | 0,0520 | 0,0495 | 20,21368422          | 78,188         | 94,166         | bicubic       |
-|                     | pit_xs_distilled_224 | 44                 | 0,0464                                              | 0,0514 | 0,0493 | 20,26778795          | 79,304         | 94,366         | bicubic       |
-| Hardcorenas         | hardcorenas_e        | 32,2               | 0,0127                                              | 0,0143 | 0,0134 | 74,36810751          | 77,792         | 93,698         | bilinear      |
-|                     | hardcorenas_f        | 32,7               | 0,0119                                              | 0,0153 | 0,0134 | 74,43488205          | 78,098         | 93,804         | bilinear      |
-| LeViT               | levit_128s           | 32,8               | 0,0074                                              | 0,0098 | 0,0088 | 113,2892364          | 76,52          | 92,866         | bicubic       |
-|                     | levit_128            | 39,9               | 0,0105                                              | 0,0133 | 0,0119 | 83,73827357          | 78,486         | 94,006         | bicubic       |
-|                     | levit_192            | 46                 | 0,0117                                              | 0,0152 | 0,0132 | 75,49154138          | 79,832         | 94,786         | bicubic       |
-|                     | levit_384            | 161                | 0,0283                                              | 0,0355 | 0,0297 | 33,61994786          | 82,588         | 96,022         | bicubic       |
-| Rexnet              | rexnet_100           | 19,1               | 0,0159                                              | 0,0175 | 0,0167 | 59,84410556          | 77,858         | 93,87          | bicubic       |
-|                     | rexnet_130           | 30,1               | 0,0218                                              | 0,0251 | 0,0231 | 43,34531065          | 79,5           | 94,682         | bicubic       |
-|                     | rexnet_150           | 38,8               | 0,0261                                              | 0,0269 | 0,0275 | 36,31125825          | 80,31          | 95,166         | bicubic       |
-|                     | rexnet_200           | 65,3               | 0,0372                                              | 0,0428 | 0,0388 | 25,76275634          | 81,628         | 95,668         | bicubic       |
-| HRNet               | hrnet_w18_s          | 52,7               | 0,0231                                              | 0,0298 | 0,0253 | 39,49241333          | 72,34          | 90,678         | bilinear      |
-|                     | hrnet_w18_s2         | 62,3               | 0,0367                                              | 0,0479 | 0,0416 | 24,04666871          | 75,118         | 92,416         | bilinear      |
-| EfficientNet        | tf_effnet_b0_ns      | 21,1               | 0,0177                                              | 0,0246 | 0,0188 | 53,2333286           | 78,658         | 94,376         | bicubic       |
-|                     | tf_effnet_v2_b0      | 28,5               | 0,0164                                              | 0,0200 | 0,0184 | 54,39716128          | 78,36          | 94,024         | bicubic       |
-|                     | tf_effnet_v2_b1      | 32,4               | 0,0218                                              | 0,0264 | 0,0232 | 43,19406317          | 79,462         | 94,726         | bicubic       |
-|                     | effnet_b1_pruned     | 25,3               | 0,0161                                              | 0,0178 | 0,0170 | 58,84248773          | 78,24          | 93,832         | bicubic       |
-| MobileViT           | mobilevit_xxs        | 5,1                | 0,0187                                              | 0,0242 | 0,0201 | 49,69032577          | 69             | -              | bilinear      |
-|                     | mobilevit_s          | 22,3               | 0,0444                                              | 0,0544 | 0,0464 | 21,56989809          | 78,4           | -              | bilinear      |
-|                     | mobilevit_xs         | 9,3                | 0,0341                                              | 0,0401 | 0,0365 | 27,4318441           | 74,8           | -              | bilinear      |
-| Ese                 | ese_vovnet19b_dw     | 26,2               | 0,0142                                              | 0,0174 | 0,0150 | 66,58710872          | 76,8           | 93,272         | bicubic       |
-| EcaresNet           | ecaresnet50d_pruned  | 79,7               | 0,0346                                              | 0,0397 | 0,0367 | 27,26925843          | 79,71          | 94,88          | bicubic       |
+
+<table>
+    <thead align="center">
+        <tr>
+            <th rowspan="2"><span style="font-weight:bold">Architecture family</</th>
+            <th rowspan="2">Model name</th>
+            <th rowspan="2">MLmodel weight, MB</th>
+            <th colspan="3">Running time (100 starts) on emulator Iphone 8, sec</th>
+            <th rowspan="2">Average frames / sec</th>
+            <th colspan="2">Metrics</th>
+            <th rowspan="2">Interpolation</th>
+        </tr>
+        <tr>
+            <td>Min</td>
+            <td>Max</td>
+            <td>Avg</td>
+            <td>ImageNet<br>top-1</td>
+            <td>ImageNet<br>top-5</td>
+        </tr>
+    </thead>
+    <tbody align="center">
+        <tr>
+            <td rowspan="4">MobileNet</td>
+            <td align="center">mn2_100</td>
+            <td>14.7</td>
+            <td>0.0090</td>
+            <td>0.0114</td>
+            <td>0.0100</td>
+            <!-- <td><b>3.39</b></td> -->
+            <td><b>99.86482083</b></td>
+            <td>72.952</td>
+            <td>91.002</td>
+            <!-- <td><ins>2.51</ins></td> -->
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td align="center">mn2_110d</td>
+            <td>18</td>
+            <td>0.0128</td>
+            <td>0.0152</td>
+            <td>0.0137</td>
+            <td>72.92339643</td>
+            <td>75.052</td>
+            <td>92.188</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td align="center">mn3_rw</td>
+            <td>21.9</td>
+            <td>0.0078</td>
+            <td>0.0098</td>
+            <td>0.0087</td>
+            <td><b>115.1641272</b></td>
+            <td>75.63</td>
+            <td>92.708</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td align="center">mn3_large_100_miil</td>
+            <td>21.9</td>
+            <td>0.0074</td>
+            <td>0.0090</td>
+            <td>0.0084</td>
+            <td><b>118.5257193</b></td>
+            <td>77.918</td>
+            <td>92.906</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td rowspan="2">Gernet</td>
+            <td align="center">gernet_s</td>
+            <td>32.6</td>
+            <td>0.0111</td>
+            <td>0.0188</td>
+            <td>0.0125</td>
+            <td>79.71578839</td>
+            <td>76.912</td>
+            <td>93.134</td>
+            <td>bilinear</td>
+        </tr>
+        <tr>
+            <td align="center">gernet_m</td>
+            <td>84.4</td>
+            <td>0.0293</td>
+            <td>0.0397</td>
+            <td>0.0309</td>
+            <td>32.32946595</td>
+            <td>80.746</td>
+            <td>95.184</td>
+            <td>bilinear</td>
+        </tr>
+        <tr>
+            <td rowspan="2">Pit</td>
+            <td align="center">pit_xs_224</td>
+            <td>49.5</td>
+            <td>0.0469</td>
+            <td>0.0520</td>
+            <td>0.0495</td>
+            <td>20.21368422</td>
+            <td>78.188</td>
+            <td>94.166</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td align="center">pit_xs_distilled_224</td>
+            <td>44</td>
+            <td>0.0464</td>
+            <td>0.0514</td>
+            <td>0.0493</td>
+            <td>20.26778795</td>
+            <td>79.304</td>
+            <td>94.366</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td rowspan="2">Hardcorenas</td>
+            <td align="center">hardcorenas_e</td>
+            <td>32.2</td>
+            <td>0.0127</td>
+            <td>0.0143</td>
+            <td>0.0134</td>
+            <td>74.36810751</td>
+            <td>77.792</td>
+            <td>93.698</td>
+            <td>bilinear</td>
+        </tr>
+        <tr>
+            <td align="center">hardcorenas_f</td>
+            <td>32.7</td>
+            <td>0.0119</td>
+            <td>0.0153</td>
+            <td>0.0134</td>
+            <td>74.43488205</td>
+            <td>78.098</td>
+            <td>93.804</td>
+            <td>bilinear</td>
+        </tr>
+        <tr>
+            <td rowspan="4">LeViT</td>
+            <td align="center">levit_128s</td>
+            <td>32.8</td>
+            <td>0.0074</td>
+            <td>0.0098</td>
+            <td>0.0088</td>
+            <td><b>113.2892364</b></td>
+            <td>76.52</td>
+            <td>92.866</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td align="center">levit_128</td>
+            <td>39.9</td>
+            <td>0.0105</td>
+            <td>0.0133</td>
+            <td>0.0119</td>
+            <td>83.73827357</td>
+            <td>78.486</td>
+            <td>94.006</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td align="center">levit_192</td>
+            <td>46</td>
+            <td>0.0117</td>
+            <td>0.0152</td>
+            <td>0.0132</td>
+            <td>75.49154138</td>
+            <td>79.832</td>
+            <td>94.786</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td align="center">levit_384</td>
+            <td>161</td>
+            <td>0.0283</td>
+            <td>0.0355</td>
+            <td>0.0297</td>
+            <td>33.61994786</td>
+            <td>82.588</td>
+            <td>96.022</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td rowspan="4">RexNet</td>
+            <td align="center">rexnet_100</td>
+            <td>19.1</td>
+            <td>0.0159</td>
+            <td>0.0175</td>
+            <td>0.0167</td>
+            <td>59.84410556</td>
+            <td>77.858</td>
+            <td>93.87</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td align="center">rexnet_130</td>
+            <td>30.1</td>
+            <td>0.0218</td>
+            <td>0.0251</td>
+            <td>0.0231</td>
+            <td>43.34531065</td>
+            <td>79.5</td>
+            <td>94.682</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td align="center">rexnet_150</td>
+            <td>38.8</td>
+            <td>0.0260</td>
+            <td>0.0268</td>
+            <td>0.0267</td>
+            <td>37.45697546</td>
+            <td>80.31</td>
+            <td>95.166</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td align="center">rexnet_200</td>
+            <td>65.3</td>
+            <td>0.0372</td>
+            <td>0.0428</td>
+            <td>0.0388</td>
+            <td>25.76275634</td>
+            <td>81.628</td>
+            <td>95.668</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td rowspan="2">HRNet</td>
+            <td align="center">hrnet_w18_s</td>
+            <td>52.7</td>
+            <td>0.0231</td>
+            <td>0.0298</td>
+            <td>0.0253</td>
+            <td>39.49241333</td>
+            <td>72.34</td>
+            <td>90.678</td>
+            <td>bilinear</td>
+        </tr>
+        <tr>
+            <td align="center">hrnet_w18_s2</td>
+            <td>62.3</td>
+            <td>0.0367</td>
+            <td>0.0479</td>
+            <td>0.0416</td>
+            <td>24.04666871</td>
+            <td>75.118</td>
+            <td>92.416</td>
+            <td>bilinear</td>
+        </tr>
+        <tr>
+            <td rowspan="4">EfficientNet</td>
+            <td align="center">tf_effnet_b0_ns</td>
+            <td>21.1</td>
+            <td>0.0177</td>
+            <td>0.0246</td>
+            <td>0.0188</td>
+            <td>53.2333286</td>
+            <td>78.658</td>
+            <td>94.376</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td align="center">tf_effnet_v2_b0</td>
+            <td>28.5</td>
+            <td>0.0164</td>
+            <td>0.0200</td>
+            <td>0.0184</td>
+            <td>54.39716128</td>
+            <td>78.36</td>
+            <td>94.024</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td align="center">tf_effnet_v2_b1</td>
+            <td>32.4</td>
+            <td>0.0218</td>
+            <td>0.0264</td>
+            <td>0.0232</td>
+            <td>43.19406317</td>
+            <td>79.462</td>
+            <td>94.726</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td align="center">effnet_b1_pruned</td>
+            <td>25.3</td>
+            <td>0.0161</td>
+            <td>0.0178</td>
+            <td>0.0170</td>
+            <td>58.84248773</td>
+            <td>78.24</td>
+            <td>93.832</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td rowspan="3">MobileViT</td>
+            <td align="center">mobilevit_xxs</td>
+            <td>5.1</td>
+            <td>0.0187</td>
+            <td>0.0242</td>
+            <td>0.0201</td>
+            <td>49.69032577</td>
+            <td>69</td>
+            <td>-</td>
+            <td>bilinear</td>
+        </tr>
+        <tr>
+            <td align="center">mobilevit_xs</td>
+            <td>9.3</td>
+            <td>0.0341</td>
+            <td>0.0401</td>
+            <td>0.0365</td>
+            <td>27.4318441</td>
+            <td>74.8</td>
+            <td>-</td>
+            <td>bilinear</td>
+        </tr>
+        <tr>
+            <td align="center">mobilevit_s</td>
+            <td>22.3</td>
+            <td>0.0444</td>
+            <td>0.0544</td>
+            <td>0.0464</td>
+            <td>21.56989809</td>
+            <td>78.4</td>
+            <td>-</td>
+            <td>bilinear</td>
+        </tr>
+        <tr>
+            <td rowspan="1">Ese</td>
+            <td align="center">ese_vovnet19b_dw</td>
+            <td>26.2</td>
+            <td>0.0142</td>
+            <td>0.0174</td>
+            <td>0.0150</td>
+            <td>66.58710872</td>
+            <td>76.8</td>
+            <td>93.272</td>
+            <td>bicubic</td>
+        </tr>
+        <tr>
+            <td rowspan="1">EcaresNet</td>
+            <td align="center">ecaresnet50d_pruned</td>
+            <td>79.7</td>
+            <td>0.0346</td>
+            <td>0.0397</td>
+            <td>0.0367</td>
+            <td>27.26925843</td>
+            <td>79.71</td>
+            <td>94.88</td>
+            <td>bicubic</td>
+        </tr>
+    </tbody>
+</table>
+
