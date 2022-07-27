@@ -10,7 +10,6 @@
 		0B69BFB228911AA800B56A10 /* Create models.ipynb in Resources */ = {isa = PBXBuildFile; fileRef = 0B69BFAD28911AA800B56A10 /* Create models.ipynb */; };
 		0B69BFB328911AA800B56A10 /* benchmark.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0B69BFAE28911AA800B56A10 /* benchmark.csv */; };
 		0B69BFB428911AA800B56A10 /* imagenet_classes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0B69BFAF28911AA800B56A10 /* imagenet_classes.txt */; };
-		0B69BFB528911AA800B56A10 /* models in Resources */ = {isa = PBXBuildFile; fileRef = 0B69BFB028911AA800B56A10 /* models */; };
 		0B69BFB628911AA800B56A10 /* dog_224_cub.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0B69BFB128911AA800B56A10 /* dog_224_cub.jpg */; };
 		0B69BFB828911DDF00B56A10 /* MLModelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B69BFB728911DDF00B56A10 /* MLModelsViewController.swift */; };
 		0B69BFBC2891240900B56A10 /* MLModelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B69BFBA2891240900B56A10 /* MLModelCell.swift */; };
@@ -48,7 +47,6 @@
 		0B69BFAD28911AA800B56A10 /* Create models.ipynb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Create models.ipynb"; sourceTree = "<group>"; };
 		0B69BFAE28911AA800B56A10 /* benchmark.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = benchmark.csv; sourceTree = "<group>"; };
 		0B69BFAF28911AA800B56A10 /* imagenet_classes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = imagenet_classes.txt; sourceTree = "<group>"; };
-		0B69BFB028911AA800B56A10 /* models */ = {isa = PBXFileReference; lastKnownFileType = folder; path = models; sourceTree = "<group>"; };
 		0B69BFB128911AA800B56A10 /* dog_224_cub.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dog_224_cub.jpg; sourceTree = "<group>"; };
 		0B69BFB728911DDF00B56A10 /* MLModelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLModelsViewController.swift; sourceTree = "<group>"; };
 		0B69BFBA2891240900B56A10 /* MLModelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLModelCell.swift; sourceTree = "<group>"; };
@@ -110,7 +108,6 @@
 				0B69BFAD28911AA800B56A10 /* Create models.ipynb */,
 				0B69BFB128911AA800B56A10 /* dog_224_cub.jpg */,
 				0B69BFAF28911AA800B56A10 /* imagenet_classes.txt */,
-				0B69BFB028911AA800B56A10 /* models */,
 				74DA4BCF27C13FB3005290A6 /* Backbone Runtime */,
 				74DA4BE627C13FB5005290A6 /* Backbone RuntimeTests */,
 				74DA4BF027C13FB5005290A6 /* Backbone RuntimeUITests */,
@@ -268,7 +265,6 @@
 			files = (
 				0B69BFB628911AA800B56A10 /* dog_224_cub.jpg in Resources */,
 				74DA4BDD27C13FB5005290A6 /* LaunchScreen.storyboard in Resources */,
-				0B69BFB528911AA800B56A10 /* models in Resources */,
 				0B69BFB428911AA800B56A10 /* imagenet_classes.txt in Resources */,
 				74DA4BDA27C13FB5005290A6 /* Assets.xcassets in Resources */,
 				0B69BFB328911AA800B56A10 /* benchmark.csv in Resources */,

@@ -176,44 +176,48 @@ class SelectImageViewController: UIViewController, UIImagePickerControllerDelega
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
-        guard let modelInfo = modelInfo else { return }
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
             return
         }
-        let pathToLabels = Bundle.main.path(forResource: "imagenet_classes", ofType: "txt")
-        let labels = downloadClasses(path: pathToLabels!)
+        self.imageView.image = image
         
-        let countRuns: Int = 100
-        
-        var probs5k = try! MLMultiArray([1]), indices5k = try! MLMultiArray([1]), timeInSec = CFAbsoluteTimeGetCurrent()
-        
-        imageView.image = image
-        
-        var cumsumTime = [] as [Double]
-        
-        for _ in 0...countRuns - 1 {
-            (_, _, timeInSec) = inferenceOneModel(modelURL: modelInfo.url, image: image)
-            cumsumTime.append(Double(timeInSec))
+        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
+            guard let modelInfo = self.modelInfo else { return }
+
+            let pathToLabels = Bundle.main.path(forResource: "imagenet_classes", ofType: "txt")
+            let labels = self.downloadClasses(path: pathToLabels!)
+            
+            let countRuns: Int = 100
+            
+            var probs5k = try! MLMultiArray([1]), indices5k = try! MLMultiArray([1]), timeInSec = CFAbsoluteTimeGetCurrent()
+            
+            
+            var cumsumTime = [] as [Double]
+            
+            for _ in 0...countRuns - 1 {
+                (_, _, timeInSec) = self.inferenceOneModel(modelURL: modelInfo.url, image: image)
+                cumsumTime.append(Double(timeInSec))
+            }
+            
+            (probs5k, indices5k, _) = self.inferenceOneModel(modelURL: modelInfo.url, image: image)
+            
+            var info: String = "Min time:\n\(String(describing: cumsumTime.min()!))\nMax time:\n\(String(describing: cumsumTime.max()!))\nAverage time:\n\(String(describing: cumsumTime.average))\n"
+            
+            for i in 0...indices5k.count - 1 {
+                let index = Int(indices5k[i].int32Value)
+                info += "\n\(labels[index]): \(probs5k[i].floatValue)"
+            }
+            
+            print(info)
+            
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: modelInfo.name, message: info, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+                    NSLog("The \"OK\" alert occured.")
+                }))
+                self.present(alert, animated: true, completion: nil)
+            }
         }
-        
-        (probs5k, indices5k, _) = inferenceOneModel(modelURL: modelInfo.url, image: image)
-        
-        var info: String = "Min time:\n\(String(describing: cumsumTime.min()!))\nMax time:\n\(String(describing: cumsumTime.max()!))\nAverage time:\n\(String(describing: cumsumTime.average))\n"
-        
-        for i in 0...indices5k.count - 1 {
-            let index = Int(indices5k[i].int32Value)
-            info += "\n\(labels[index]): \(probs5k[i].floatValue)"
-        }
-        
-        print(info)
-        
-        let alert = UIAlertController(title: modelInfo.name, message: info, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
-            NSLog("The \"OK\" alert occured.")
-        }))
-        self.present(alert, animated: true, completion: nil)
-        
-        
         
     }
     
