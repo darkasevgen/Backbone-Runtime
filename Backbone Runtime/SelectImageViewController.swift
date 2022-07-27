@@ -80,66 +80,73 @@ extension UIImage {
     }
 }
 
-class SelectImageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class SelectImageViewController: UIViewController {
+    
+    @IBOutlet private weak var selectedImageView: UIImageView!
+    @IBOutlet private weak var progressLabelBackgroundView: UIView!
+    @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet private weak var progressBar: UIProgressView!
+    @IBOutlet private weak var progressLabel: UILabel!
     
     var modelInfo: MLModelInfo?
     
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "photo")
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-    
-    private let label: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.text = "Select Image"
-        label.numberOfLines = 0
-        
-        return label
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(label)
-        view.addSubview(imageView)
+        setupUI()
+    }
+    
+    
+    @IBAction func didTapProcessImage(_ sender: Any) {
+        guard let image = selectedImageView.image else { return }
         
-        let tap = UITapGestureRecognizer(
-            target: self,
-            action: #selector(didTapImage)
-        )
+        let countRuns: Int = 100
         
-        tap.numberOfTapsRequired = 1
-        imageView.isUserInteractionEnabled = true
-        imageView.addGestureRecognizer(tap)
-    }
-    
-    @objc func didTapImage() {
-        let picker = UIImagePickerController()
-        picker.sourceType = .photoLibrary
-        picker.delegate = self
-        present(picker, animated: true)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        imageView.frame = CGRect(
-            x: 20,
-            y: view.safeAreaInsets.top,
-            width: view.frame.size.width-40,
-            height: view.frame.size.width-40)
-        label.frame = CGRect(
-            x: 20,
-            y: view.safeAreaInsets.top+(view.frame.size.width-40)+10,
-            width: view.frame.size.width-40,
-            height: 100
-        )
-    }
-    
-    func processingName(name: String) -> String {
-        let resultName = name.replacingOccurrences(of: "_", with: " ").replacingOccurrences(of: ".mlmodel", with: "")
-        return resultName
+        activityIndicator.startAnimating()
+        restoreProgressBar()
+        
+        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
+            guard let modelInfo = self.modelInfo else { return }
+
+            let pathToLabels = Bundle.main.path(forResource: "imagenet_classes", ofType: "txt")
+            let labels = self.downloadClasses(path: pathToLabels!)
+            
+
+            var probs5k = try! MLMultiArray([1]), indices5k = try! MLMultiArray([1]), timeInSec = CFAbsoluteTimeGetCurrent()
+            
+            
+            var cumsumTime = [] as [Double]
+            
+            for currentCountRun in 0...countRuns - 1 {
+                (_, _, timeInSec) = self.inferenceOneModel(modelURL: modelInfo.url, image: image)
+                cumsumTime.append(Double(timeInSec))
+                
+                DispatchQueue.main.async {
+                    self.progressLabel.text = "\(currentCountRun + 1)/\(countRuns)"
+                    self.progressBar.setProgress(Float(currentCountRun + 1)/Float(countRuns), animated: false)
+                }
+            }
+            
+            (probs5k, indices5k, _) = self.inferenceOneModel(modelURL: modelInfo.url, image: image)
+            
+            var info: String = "Min time:\n\(String(describing: cumsumTime.min()!))\nMax time:\n\(String(describing: cumsumTime.max()!))\nAverage time:\n\(String(describing: cumsumTime.average))\n"
+            
+            for i in 0...indices5k.count - 1 {
+                let index = Int(indices5k[i].int32Value)
+                info += "\n\(labels[index]): \(probs5k[i].floatValue)"
+            }
+            
+            print(info)
+            
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+                self.restoreProgressBar()
+                let alert = UIAlertController(title: modelInfo.name, message: info, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+                    NSLog("The \"OK\" alert occured.")
+                }))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
     }
     
     func downloadClasses(path: String) -> [String] {
@@ -172,53 +179,43 @@ class SelectImageViewController: UIViewController, UIImagePickerControllerDelega
         return (probsTop5k!, indicesTop5k!, inferenceTime)
         
     }
-    
-    
+}
+
+
+extension SelectImageViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
             return
         }
-        self.imageView.image = image
-        
-        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
-            guard let modelInfo = self.modelInfo else { return }
+        self.selectedImageView.image = image
+    }
+}
 
-            let pathToLabels = Bundle.main.path(forResource: "imagenet_classes", ofType: "txt")
-            let labels = self.downloadClasses(path: pathToLabels!)
-            
-            let countRuns: Int = 100
-            
-            var probs5k = try! MLMultiArray([1]), indices5k = try! MLMultiArray([1]), timeInSec = CFAbsoluteTimeGetCurrent()
-            
-            
-            var cumsumTime = [] as [Double]
-            
-            for _ in 0...countRuns - 1 {
-                (_, _, timeInSec) = self.inferenceOneModel(modelURL: modelInfo.url, image: image)
-                cumsumTime.append(Double(timeInSec))
-            }
-            
-            (probs5k, indices5k, _) = self.inferenceOneModel(modelURL: modelInfo.url, image: image)
-            
-            var info: String = "Min time:\n\(String(describing: cumsumTime.min()!))\nMax time:\n\(String(describing: cumsumTime.max()!))\nAverage time:\n\(String(describing: cumsumTime.average))\n"
-            
-            for i in 0...indices5k.count - 1 {
-                let index = Int(indices5k[i].int32Value)
-                info += "\n\(labels[index]): \(probs5k[i].floatValue)"
-            }
-            
-            print(info)
-            
-            DispatchQueue.main.async {
-                let alert = UIAlertController(title: modelInfo.name, message: info, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
-                    NSLog("The \"OK\" alert occured.")
-                }))
-                self.present(alert, animated: true, completion: nil)
-            }
-        }
+private extension SelectImageViewController {
+    func setupUI() {
+        let tap = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didTapImage)
+        )
         
+        tap.numberOfTapsRequired = 1
+        selectedImageView.isUserInteractionEnabled = true
+        selectedImageView.addGestureRecognizer(tap)
+        
+        selectedImageView.image = UIImage(systemName: "photo")
+        selectedImageView.contentMode = .scaleAspectFit
     }
     
+    func restoreProgressBar() {
+        progressLabel.text = ""
+        progressBar.setProgress(0, animated: false)
+    }
+    
+    @objc func didTapImage() {
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.delegate = self
+        present(picker, animated: true)
+    }
 }
