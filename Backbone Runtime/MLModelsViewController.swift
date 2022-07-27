@@ -93,7 +93,7 @@ private extension MLModelsViewController {
         let ac = UIAlertController(title: "Введите URL для скачивания модели", message: nil, preferredStyle: .alert)
         ac.addTextField()
         
-        let submitAction = UIAlertAction(title: "Скачать", style: .default) { [unowned ac, weak fileManager, weak tableView] _ in
+        let submitAction = UIAlertAction(title: "Скачать", style: .default) { [unowned ac, weak self] _ in
             guard let text = ac.textFields![0].text, let url = URL(string: text) else {
                 return
             }
@@ -101,9 +101,9 @@ private extension MLModelsViewController {
             
             let downloadTask = URLSession.shared.downloadTask(with: url) {
                 urlOrNil, responseOrNil, errorOrNil in
-                fileManager?.saveModel(at: urlOrNil, with: url.lastPathComponent)
+                self?.fileManager.saveModel(at: urlOrNil, with: url.lastPathComponent)
                 DispatchQueue.main.async {
-                    tableView?.reloadData()
+                    self?.loadAvaliableModels()
                 }
             }
             downloadTask.resume()
