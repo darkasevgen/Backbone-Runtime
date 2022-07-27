@@ -46,6 +46,7 @@ extension MLModelsViewController: UITableViewDelegate {
             .instantiateViewController(withIdentifier: "SelectImageViewController") as? SelectImageViewController else {
             return
         }
+        vc.modelInfo = modelsList[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
     }
     
