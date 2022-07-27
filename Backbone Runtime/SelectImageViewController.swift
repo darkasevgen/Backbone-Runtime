@@ -12,7 +12,7 @@ import Vision
 import Accelerate
 
 
-extension URL {
+private extension URL {
     var modelName: String {
         return lastPathComponent.replacingOccurrences(of: ".mlmodelc", with: "")
     }
@@ -80,7 +80,7 @@ extension UIImage {
   }
 }
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class SelectImageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
