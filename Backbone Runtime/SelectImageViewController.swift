@@ -113,11 +113,12 @@ class SelectImageViewController: UIViewController {
 
             var probs5k = try! MLMultiArray([1]), indices5k = try! MLMultiArray([1]), timeInSec = CFAbsoluteTimeGetCurrent()
             
+            let model = try! MLModel(contentsOf: modelInfo.url, configuration: MLModelConfiguration())
             
             var cumsumTime = [] as [Double]
             
             for currentCountRun in 0...countRuns - 1 {
-                (_, _, timeInSec) = self.inferenceOneModel(modelURL: modelInfo.url, image: image)
+                (_, _, timeInSec) = self.inferenceOneModel(model: model, image: image)
                 cumsumTime.append(Double(timeInSec))
                 
                 DispatchQueue.main.async {
@@ -126,7 +127,7 @@ class SelectImageViewController: UIViewController {
                 }
             }
             
-            (probs5k, indices5k, _) = self.inferenceOneModel(modelURL: modelInfo.url, image: image)
+            (probs5k, indices5k, _) = self.inferenceOneModel(model: model, image: image)
             
             var info: String = "Min time:\n\(String(describing: cumsumTime.min()!))\nMax time:\n\(String(describing: cumsumTime.max()!))\nAverage time:\n\(String(describing: cumsumTime.average))\n"
             
@@ -156,10 +157,7 @@ class SelectImageViewController: UIViewController {
         return labels
     }
     
-    func inferenceOneModel(modelURL: URL, image: UIImage) -> (MLMultiArray, MLMultiArray, CFAbsoluteTime) {
-        let compiledUrl = try! MLModel.compileModel(at: modelURL)
-        let model = try! MLModel(contentsOf: compiledUrl, configuration: MLModelConfiguration())
-        
+    func inferenceOneModel(model: MLModel, image: UIImage) -> (MLMultiArray, MLMultiArray, CFAbsoluteTime) {
         let desc = model.modelDescription.inputDescriptionsByName["image"]
         let w = desc!.imageConstraint!.pixelsWide
         let h = desc!.imageConstraint!.pixelsHigh

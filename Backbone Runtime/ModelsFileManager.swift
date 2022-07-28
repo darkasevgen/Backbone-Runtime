@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreML
 
 struct MLModelInfo {
     let name: String
@@ -28,8 +29,10 @@ final class ModelsFileManager {
         
         guard let fileURL = url else { return }
         do {
-            let savedURL = pathToMLModels.appendingPathComponent(name)
-            try FileManager.default.moveItem(at: fileURL, to: savedURL)
+            let compiledUrl = try! MLModel.compileModel(at: fileURL)
+            let savedURL = pathToMLModels.appendingPathComponent(compiledUrl.lastPathComponent)
+            try FileManager.default.moveItem(at: compiledUrl, to: savedURL)
+            try FileManager.default.removeItem(at: fileURL)
         } catch {
             print ("file error: \(error)")
         }
@@ -42,7 +45,7 @@ final class ModelsFileManager {
             let directoryContents = try FileManager
                 .default
                 .contentsOfDirectory(at: pathToMLModels, includingPropertiesForKeys: nil)
-                .filter { $0.lastPathComponent.contains(".mlmodel") }
+                .filter { $0.lastPathComponent.contains(".mlmodelc") }
             print(directoryContents)
             return directoryContents.map { MLModelInfo(name: $0.fileName, url: $0) }
         } catch {
