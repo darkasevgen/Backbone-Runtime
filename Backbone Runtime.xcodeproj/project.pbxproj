@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B12F509289296D10005C1AC /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B12F508289296D10005C1AC /* UIImage+Ext.swift */; };
+		0B12F50C289297460005C1AC /* Array+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B12F50B289297460005C1AC /* Array+Ext.swift */; };
 		0B69BFB228911AA800B56A10 /* Create models.ipynb in Resources */ = {isa = PBXBuildFile; fileRef = 0B69BFAD28911AA800B56A10 /* Create models.ipynb */; };
 		0B69BFB328911AA800B56A10 /* benchmark.csv in Resources */ = {isa = PBXBuildFile; fileRef = 0B69BFAE28911AA800B56A10 /* benchmark.csv */; };
 		0B69BFB428911AA800B56A10 /* imagenet_classes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0B69BFAF28911AA800B56A10 /* imagenet_classes.txt */; };
@@ -44,6 +46,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0B12F508289296D10005C1AC /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
+		0B12F50B289297460005C1AC /* Array+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Ext.swift"; sourceTree = "<group>"; };
 		0B69BFAD28911AA800B56A10 /* Create models.ipynb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Create models.ipynb"; sourceTree = "<group>"; };
 		0B69BFAE28911AA800B56A10 /* benchmark.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = benchmark.csv; sourceTree = "<group>"; };
 		0B69BFAF28911AA800B56A10 /* imagenet_classes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = imagenet_classes.txt; sourceTree = "<group>"; };
@@ -92,6 +96,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B12F507289296B90005C1AC /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				0B12F508289296D10005C1AC /* UIImage+Ext.swift */,
+				0B12F50B289297460005C1AC /* Array+Ext.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		0B12F50D28929DB80005C1AC /* User Stories */ = {
+			isa = PBXGroup;
+			children = (
+				0B12F50E2892A4D90005C1AC /* MLModels */,
+				74DA4BD627C13FB3005290A6 /* Main.storyboard */,
+				74DA4BD427C13FB3005290A6 /* SelectImageViewController.swift */,
+			);
+			path = "User Stories";
+			sourceTree = "<group>";
+		};
+		0B12F50E2892A4D90005C1AC /* MLModels */ = {
+			isa = PBXGroup;
+			children = (
+				0B69BFB9289123E800B56A10 /* Cells */,
+				0B69BFB728911DDF00B56A10 /* MLModelsViewController.swift */,
+			);
+			path = MLModels;
+			sourceTree = "<group>";
+		};
+		0B12F50F2892AA4D0005C1AC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		0B69BFB9289123E800B56A10 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -128,16 +167,15 @@
 		74DA4BCF27C13FB3005290A6 /* Backbone Runtime */ = {
 			isa = PBXGroup;
 			children = (
-				0B69BFB9289123E800B56A10 /* Cells */,
+				0B12F50F2892AA4D0005C1AC /* Services */,
+				0B12F50D28929DB80005C1AC /* User Stories */,
+				0B12F507289296B90005C1AC /* Extensions */,
 				74DA4BD027C13FB3005290A6 /* AppDelegate.swift */,
 				74DA4BD227C13FB3005290A6 /* SceneDelegate.swift */,
-				74DA4BD427C13FB3005290A6 /* SelectImageViewController.swift */,
 				0B69BFBE2891322400B56A10 /* ModelsFileManager.swift */,
-				74DA4BD627C13FB3005290A6 /* Main.storyboard */,
 				74DA4BD927C13FB5005290A6 /* Assets.xcassets */,
 				74DA4BDB27C13FB5005290A6 /* LaunchScreen.storyboard */,
 				74DA4BDE27C13FB5005290A6 /* Info.plist */,
-				0B69BFB728911DDF00B56A10 /* MLModelsViewController.swift */,
 			);
 			path = "Backbone Runtime";
 			sourceTree = "<group>";
@@ -295,10 +333,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B12F509289296D10005C1AC /* UIImage+Ext.swift in Sources */,
 				74DA4BD527C13FB3005290A6 /* SelectImageViewController.swift in Sources */,
 				74DA4BD127C13FB3005290A6 /* AppDelegate.swift in Sources */,
 				0B69BFBC2891240900B56A10 /* MLModelCell.swift in Sources */,
 				0B69BFBF2891322400B56A10 /* ModelsFileManager.swift in Sources */,
+				0B12F50C289297460005C1AC /* Array+Ext.swift in Sources */,
 				74DA4BD327C13FB3005290A6 /* SceneDelegate.swift in Sources */,
 				0B69BFB828911DDF00B56A10 /* MLModelsViewController.swift in Sources */,
 			);
