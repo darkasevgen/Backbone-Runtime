@@ -8,80 +8,9 @@
 import UIKit
 import CoreML
 import Vision
-
 import Accelerate
 
-
-private extension URL {
-    var modelName: String {
-        return lastPathComponent.replacingOccurrences(of: ".mlmodelc", with: "")
-    }
-}
-
-extension Array where Element: BinaryFloatingPoint {
-    var average: Double {
-        if self.isEmpty {
-            return 0.0
-        } else {
-            let sum = self.reduce(0, +)
-            return Double(sum) / Double(self.count)
-        }
-    }
-    
-}
-
-extension UIImage {
-    
-    public func pixelBuffer(width: Int, height: Int) -> CVPixelBuffer? {
-        return pixelBuffer(width: width, height: height,
-                           pixelFormatType: kCVPixelFormatType_32ARGB,
-                           colorSpace: CGColorSpaceCreateDeviceRGB(),
-                           alphaInfo: .noneSkipFirst)
-    }
-    
-    // UIImage -> RGB
-    func pixelBuffer(width: Int, height: Int, pixelFormatType: OSType,
-                     colorSpace: CGColorSpace, alphaInfo: CGImageAlphaInfo) -> CVPixelBuffer? {
-        var maybePixelBuffer: CVPixelBuffer?
-        let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
-             kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue]
-        let status = CVPixelBufferCreate(kCFAllocatorDefault,
-                                         width,
-                                         height,
-                                         pixelFormatType,
-                                         attrs as CFDictionary,
-                                         &maybePixelBuffer)
-        
-        guard status == kCVReturnSuccess, let pixelBuffer = maybePixelBuffer else {
-            return nil
-        }
-        
-        CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
-        let pixelData = CVPixelBufferGetBaseAddress(pixelBuffer)
-        
-        guard let context = CGContext(data: pixelData,
-                                      width: width,
-                                      height: height,
-                                      bitsPerComponent: 8,
-                                      bytesPerRow: CVPixelBufferGetBytesPerRow(pixelBuffer),
-                                      space: colorSpace,
-                                      bitmapInfo: alphaInfo.rawValue)
-        else {
-            return nil
-        }
-        
-        UIGraphicsPushContext(context)
-        context.translateBy(x: 0, y: CGFloat(height))
-        context.scaleBy(x: 1, y: -1)
-        self.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
-        UIGraphicsPopContext()
-        CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
-        return pixelBuffer
-    }
-}
-
-class SelectImageViewController: UIViewController {
-    
+final class SelectImageViewController: UIViewController {
     @IBOutlet private weak var selectedImageView: UIImageView!
     @IBOutlet private weak var progressLabelBackgroundView: UIView!
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
@@ -89,12 +18,16 @@ class SelectImageViewController: UIViewController {
     @IBOutlet private weak var progressLabel: UILabel!
     
     var modelInfo: MLModelInfo?
+    var imagePickerController: UIImagePickerController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        imagePickerController = .init()
+        imagePickerController?.sourceType = .photoLibrary
+        imagePickerController?.delegate = self
+
         setupUI()
     }
-    
     
     @IBAction func didTapProcessImage(_ sender: Any) {
         guard let image = selectedImageView.image else { return }
@@ -129,7 +62,11 @@ class SelectImageViewController: UIViewController {
             
             (probs5k, indices5k, _) = self.inferenceOneModel(model: model, image: image)
             
-            var info: String = "Min time:\n\(String(describing: cumsumTime.min()!))\nMax time:\n\(String(describing: cumsumTime.max()!))\nAverage time:\n\(String(describing: cumsumTime.average))\n"
+            var info = """
+            Min time:\n\(String(describing: cumsumTime.min()!))
+            Max time:\n\(String(describing: cumsumTime.max()!))
+            Average time:\n\(String(describing: cumsumTime.average))\n
+            """
             
             for i in 0...indices5k.count - 1 {
                 let index = Int(indices5k[i].int32Value)
@@ -142,9 +79,7 @@ class SelectImageViewController: UIViewController {
                 self.activityIndicator.stopAnimating()
                 self.restoreProgressBar()
                 let alert = UIAlertController(title: modelInfo.name, message: info, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
-                    NSLog("The \"OK\" alert occured.")
-                }))
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }
         }
@@ -211,9 +146,7 @@ private extension SelectImageViewController {
     }
     
     @objc func didTapImage() {
-        let picker = UIImagePickerController()
-        picker.sourceType = .photoLibrary
-        picker.delegate = self
+        guard let picker = imagePickerController else { return }
         present(picker, animated: true)
     }
 }
